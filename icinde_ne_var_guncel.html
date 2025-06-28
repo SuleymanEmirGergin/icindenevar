@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"/>
+  <title>İçinde Ne Var?</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: crimson;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .hidden {
+      display: none;
+    }
+    h1, h2 {
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      margin: 10px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    #yesBtn, #yesBtn2 {
+      background-color: darkgreen;
+      color: white;
+    }
+    #noBtn, #noBtn2 {
+      background-color: darkred;
+      color: white;
+    }
+    #poem {
+      white-space: pre-line;
+      font-size: 1.2em;
+      margin: 30px 0;
+    }
+    textarea {
+      width: 80%;
+      height: 200px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1em;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+<div id="page1">
+  <h1>İçinde ne olduğunu merak ediyor musun?</h1>
+  <button id="yesBtn" onclick="showPoem()">Evet</button>
+  <button id="noBtn" onclick="shrinkNoGrowYes()">Hayır</button>
+</div>
+
+<div class="hidden" id="page2">
+  <h2>Bir Doğum Günü İçin</h2>
+  <div id="poem">
+Göklerin yüzü güldü mü 
+Dünyaya geldiğin zaman?
+Azgın sular duruldu mu
+Dünyaya geldiğin zaman?
+
+Güneşler gibi tek miydin?
+Ay ışığından ak mıydın?
+Böyle nazlı çiçek miydin?
+Dünyaya geldiğin zaman?
+
+Yıldızlar halin sordu mu?
+Bulutlar selam durdu mu?
+Yerlerin kalbi vurdu mu?
+Dünyaya geldiğin zaman?
+
+Aşkını candan duymuşum,
+Canım yoluna koymuşum.
+Tam dokuz yaşındaymışım
+Dünyaya geldiğin zaman.
+
+Kimbilir nasıl güzeldin,
+Göklerden yere süzüldün...
+Benim alnıma yazıldın
+Dünyaya geldiğin zaman.
+  </div>
+  <h3>
+    Bu Sabahattin Ali'nin en sevdiğim şiiri. Senin de öyleyse evet'e basıp geçebilirsin.<br/>
+    Eğer değilse hayır tuşuna bastığında senin Sabahattin Ali'den en sevdiğin şiiri girmeni isteyeceğim.
+  </h3>
+  <button id="yesBtn2" onclick="showHint()">Evet</button>
+  <button id="noBtn2" onclick="goToInput()">Hayır</button>
+</div>
+
+<div class="hidden" id="agreePage">
+  <h1>Kafe hakkında ufak bir tüyo:</h1>
+  <p>İçeride dönem eşyalarını barındıran ve orta çağ avrupasını biraz daha yakından göreceğimiz eşyalar var :)</p>
+</div>
+
+<div class="hidden" id="inputPage">
+  <h2>Buraya en sevdiğin Sabahattin Ali şiirini yazabilirsin:</h2>
+  <textarea id="userPoem" placeholder="Şiiri buraya yaz..."></textarea><br/><br/>
+  <button onclick="submitPoem()">Bitir</button>
+</div>
+
+<div class="hidden" id="finalPage">
+  <h1>Kafe hakkında ufak bir tüyo:</h1>
+  <p>İçeride dönem eşyalarını barındıran ve orta çağ avrupasını biraz daha yakından göreceğimiz eşyalar var :)</p>
+</div>
+
+<div class="hidden" id="questionPage">
+  <h2>Hâlâ gitmek istiyorsun değil mi?</h2>
+  <button id="yesGoBtn" onclick="showFinalMessage()">Evet</button>
+  <button id="noGoBtn" onclick="shrinkNoGrowYes2()">Hayır</button>
+</div>
+
+<div class="hidden" id="redirectPage">
+  <h2>O gün gelene kadar görüşmek üzere.</h2>
+  <p>
+    Ama yine de hâlâ kafeden görüntüleri merak ediyorsan bu
+    <a href="Kafe.pptx" style="color: yellow; text-decoration: underline;" target="_blank">sunumdan</a>
+    ulaşabilirsin.
+  </p>
+</div>
+
+<script>
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+
+  function shrinkNoGrowYes() {
+    let noSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
+    let yesSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+    if (noSize > 10) {
+      noBtn.style.fontSize = (noSize - 2) + "px";
+      yesBtn.style.fontSize = (yesSize + 2) + "px";
+    }
+  }
+
+  function showPoem() {
+    document.getElementById("page1").classList.add("hidden");
+    document.getElementById("page2").classList.remove("hidden");
+  }
+
+  function showHint() {
+    document.getElementById("page2").classList.add("hidden");
+    document.getElementById("agreePage").classList.remove("hidden");
+    setTimeout(() => {
+      document.getElementById("agreePage").classList.add("hidden");
+      document.getElementById("questionPage").classList.remove("hidden");
+    }, 3000);
+  }
+
+  function goToInput() {
+    document.getElementById("page2").classList.add("hidden");
+    document.getElementById("inputPage").classList.remove("hidden");
+  }
+
+  function submitPoem() {
+    const userPoem = document.getElementById("userPoem").value;
+    localStorage.setItem("favSabahattinAliPoem", userPoem);
+    document.getElementById("inputPage").classList.add("hidden");
+    document.getElementById("finalPage").classList.remove("hidden");
+    setTimeout(() => {
+      document.getElementById("finalPage").classList.add("hidden");
+      document.getElementById("questionPage").classList.remove("hidden");
+    }, 3000);
+  }
+
+  const yesGoBtn = document.getElementById("yesGoBtn");
+  const noGoBtn = document.getElementById("noGoBtn");
+
+  function showFinalMessage() {
+    document.getElementById("questionPage").classList.add("hidden");
+    document.getElementById("redirectPage").classList.remove("hidden");
+
+    confetti({
+      particleCount: 200,
+      spread: 90,
+      origin: { y: 0.6 }
+    });
+  }
+
+  function shrinkNoGrowYes2() {
+    let noSize = parseFloat(window.getComputedStyle(noGoBtn).fontSize);
+    let yesSize = parseFloat(window.getComputedStyle(yesGoBtn).fontSize);
+    if (noSize > 10) {
+      noGoBtn.style.fontSize = (noSize - 2) + "px";
+      yesGoBtn.style.fontSize = (yesSize + 2) + "px";
+    }
+  }
+</script>
+</body>
+</html>
